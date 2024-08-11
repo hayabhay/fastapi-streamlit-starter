@@ -1,0 +1,46 @@
+default_language_version:
+  python: python312
+default_stages: [commit]
+
+repos:
+  # Common pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=20000']
+      - id: check-ast
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-symlinks
+      - id: check-json
+      - id: check-xml
+      - id: check-toml
+      - id: check-yaml
+        args: ['--unsafe']
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: pretty-format-json
+        args: ['--autofix']
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.5.7
+    hooks:
+      # Run the linter - replaces Flake8, isort, pydocstyle, pyupgrade
+      - id: ruff
+        types_or: [ python, pyi, jupyter ]
+        args: [ --fix ]
+      # Run the formatter - replaces Black
+      - id: ruff-format
+        types_or: [ python, pyi, jupyter ]
+
+# sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
+ci:
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false
