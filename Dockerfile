@@ -69,7 +69,7 @@ RUN --mount=type=cache,target=/root/.cache \
 # --------------------------------------------------------------------------------
 FROM python-base AS dev
 WORKDIR $PYSETUP_PATH
-ENV FASTAPI_ENV=dev
+ENV MODE=dev
 # copy in our built poetry + venv
 COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
@@ -93,13 +93,37 @@ EXPOSE 8501
 WORKDIR /app
 CMD ["./dev.sh"]
 
+# --------------------------------------------------------------------------------
+# ------------ UI Only image - used mainly for staging server --------------------
+# --------------------------------------------------------------------------------
+FROM python-base AS ui
+WORKDIR $PYSETUP_PATH
+ENV MODE=dev
+
+# copy in our built poetry + venv
+COPY --from=builder-base $POETRY_HOME $POETRY_HOME
+COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
+
+# quicker install as runtime deps are already installed
+RUN --mount=type=cache,target=/root/.cache \
+    poetry install --with=dev,gcp
+
+# Copy the rest of the application & set it up
+COPY ./ui /app/ui
+
+# Run main.py when the container launches
+WORKDIR /app
+
+CMD ["sh", "-c", "streamlit run ui/01_🏠_Home.py --server.port {PORT:-8501}"]
+
 
 # --------------------------------------------------------------------------------
 # ---------------- Production image - used in production / CI --------------------
 # --------------------------------------------------------------------------------
 FROM python-base AS prod
 WORKDIR $PYSETUP_PATH
-ENV FASTAPI_ENV=prod
+ENV MODE=prod
+ENV ENV_FILENAME=
 # copy in our built poetry + venv
 COPY --from=builder-base $POETRY_HOME $POETRY_HOME
 COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
@@ -111,4 +135,5 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY ./api /app/api
 WORKDIR /app/api
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
+# Default port set to 8000
+CMD ["sh", "-c", "gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:${PORT:-8000}"]
