@@ -19,8 +19,8 @@ Make sure poetry is in the PATH variable after installation. Example: `export PA
 Now, you can clone the repo and install the dependencies:
 
 ```bash
-$ git clone
-$ poetry install --with dev
+git clone
+poetry install --with dev
 ```
 
 The `--with dev` flag is used to install the development dependencies as well. This is needed to run the Streamlit app.
@@ -31,15 +31,15 @@ The `--with dev` flag is used to install the development dependencies as well. T
 Then, you can start the FastAPI development server with:
 
 ```bash
-$ cd api
-$ poetry run uvicorn main:app --reload
+cd api
+poetry run uvicorn main:app --reload
 ```
 
 And the Streamlit development UI with:
 
 ```bash
-$ cd ui
-$ poetry run streamlit run main.py
+cd ui
+poetry run streamlit run main.py
 ```
 
 ### Docker - Local Development
@@ -47,8 +47,8 @@ $ poetry run streamlit run main.py
 To run the FastAPI and Streamlit apps together in a Docker container, you can use the included `Dockerfile`:
 
 ```bash
-$ docker build --target dev --tag myapp-dev .
-$ docker run -p 8000:8000 -p 8501:8501 fastapi-streamlit-starter
+docker build --target dev --tag myapp-dev .
+docker run -p 8000:8000 -p 8501:8501 fastapi-streamlit-starter
 ```
 
 The above paradigm is meant for development purposes.
@@ -56,7 +56,7 @@ The above paradigm is meant for development purposes.
 For production, you can use the `Dockerfile` with the `prod` target:
 
 ```bash
-$ docker build --target prod --tag myapp-prod .
+docker build --target prod --tag myapp-prod .
 ```
 
 This will create a smaller image with only the FastAPI app and its dependencies. Streamlit & its dependencies are not included in the production image since it can significantly increase the image size especially if not shared by the FastAPI app.
@@ -76,25 +76,25 @@ If not, you can follow the instructions [here](https://cloud.google.com/sdk/docs
 If you do, update it to the latest version:
 
 ```bash
-$ gcloud components update
+gcloud components update
 ```
 
 You may have to authenticate with your Google Cloud account:
 
 ```bash
-$ gcloud auth login
+gcloud auth login
 ```
 
 0.2. Create a new google cloud project either from the GUI or using the CLI:
 
 ```bash
-$ gcloud projects create my-project
+gcloud projects create my-project
 ```
 
 0.3. Set the project as the default project:
 
 ```bash
-$ gcloud config set project my-project
+gcloud config set project my-project
 ```
 
 Note: If you have multiple projects, you can switch between them using the above command. Be weary of the project you are currently using to avoid accidental pushes to the wrong project.
@@ -105,13 +105,13 @@ Note: If you have multiple projects, you can switch between them using the above
 1.1. Enable the Cloud Run API (you can do this from the GUI as well) - this is needed to to deploy the container.
 
 ```bash
-$ gcloud services enable run.googleapis.com
+gcloud services enable run.googleapis.com
 ```
 
 1.2. Enable the Artifact Registry API - this is needed to push the container to the Google Artifact Registry.
 
 ```bash
-$ gcloud services enable artifactregistry.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
 ```
 
 Note: You can also use Google Cloud Build to build and push the container to the registry. This is a more automated way of doing things. You can find more information [here](https://cloud.google.com/cloud-build/docs/quickstart-docker).
@@ -121,7 +121,7 @@ Note: You can also use Google Cloud Build to build and push the container to the
 
 - Enable the Secret Manager API:
 ```bash
-$ gcloud services enable secretmanager.googleapis.com
+gcloud services enable secretmanager.googleapis.com
 ```
 
 - Create a secrets file
@@ -147,13 +147,13 @@ gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
 2.1. Build the container image:
 
 ```bash
-$ docker build --target prod --tag gcr.io/my-project/myapp-prod .
+docker build --target prod --tag gcr.io/my-project/myapp-prod .
 ```
 
 2.2. Push the container image to the Google Artifact Registry:
 
 ```bash
-$ docker push gcr.io/my-project/myapp-prod
+docker push gcr.io/my-project/myapp-prod
 ```
 
 #### Deploy Container
@@ -161,7 +161,7 @@ $ docker push gcr.io/my-project/myapp-prod
 3.1. Deploy the container to Google Cloud Run:
 
 ```bash
-$ gcloud run deploy my-fastapi-app \
+gcloud run deploy my-fastapi-app \
     --image gcr.io/my-fastapi-project/myapp-prod \
     --platform managed \
     --region <region> \
@@ -179,19 +179,19 @@ Configurations like region, autoscaling, instance size etc. can be set as needed
 4.1. To delete the Cloud Run service:
 
 ```bash
-$ gcloud run services delete my-fastapi-app
+gcloud run services delete my-fastapi-app
 ```
 
 4.2. To delete the container image from the Google Artifact Registry:
 
 ```bash
-$ gcloud container images delete gcr.io/my-project/myapp-prod
+gcloud container images delete gcr.io/my-project/myapp-prod
 ```
 
 4.3. To delete the Google Cloud project:
 
 ```bash
-$ gcloud projects delete my-project
+gcloud projects delete my-project
 ```
 
 > Note: To launch Streamlit to GCP, you can use the same process as above but build with the `ui` target instead of the `prod` target. The server address must be explicitly set to the GCR URL for the fastapi app in the Streamlit app and relevant permissions to send/receive data from the FastAPI app must be set.
