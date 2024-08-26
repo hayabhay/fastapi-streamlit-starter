@@ -62,7 +62,7 @@ optional = true
 mkdocs = "^1.6.0"
 mkdocs-material = "^9.5.31"
 mkdocstrings = "^0.25.2"
-mkdocs-autorefs = "^1.0.1"
+mkdocs-autorefs = "^1.1.0"
 mkdocs-include-markdown-plugin = "^6.2.1"
 mike = "^2.1.2"
 
