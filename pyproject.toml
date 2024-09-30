@@ -38,14 +38,14 @@ streamlit = "^1.37.1"
 optional = true
 
 [tool.poetry.group.prod.dependencies]
-gunicorn = "^22.0.0"
+gunicorn = "^23.0.0"
 
 [tool.poetry.group.gcp]
 optional = true
 
 [tool.poetry.group.gcp.dependencies]
 google-cloud-secret-manager = "^2.20.2"
-google-cloud-logging = "^3.11.1"
+google-cloud-logging = "^3.11.2"
 
 [tool.poetry.group.test]
 optional = true
