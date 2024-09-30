@@ -45,7 +45,7 @@ optional = true
 
 [tool.poetry.group.gcp.dependencies]
 google-cloud-secret-manager = "^2.20.2"
-google-cloud-logging = "^3.11.1"
+google-cloud-logging = "^3.11.2"
 
 [tool.poetry.group.test]
 optional = true
@@ -60,7 +60,7 @@ optional = true
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.0"
-mkdocs-material = "^9.5.31"
+mkdocs-material = "^9.5.39"
 mkdocstrings = "^0.25.2"
 mkdocs-autorefs = "^1.0.1"
 mkdocs-include-markdown-plugin = "^6.2.1"
