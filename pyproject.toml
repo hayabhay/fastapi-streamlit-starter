@@ -38,7 +38,7 @@ streamlit = "^1.37.1"
 optional = true
 
 [tool.poetry.group.prod.dependencies]
-gunicorn = "^22.0.0"
+gunicorn = "^23.0.0"
 
 [tool.poetry.group.gcp]
 optional = true
