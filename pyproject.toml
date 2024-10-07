@@ -61,7 +61,7 @@ optional = true
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.6.0"
 mkdocs-material = "^9.5.39"
-mkdocstrings = "^0.25.2"
+mkdocstrings = "^0.26.1"
 mkdocs-autorefs = "^1.2.0"
 mkdocs-include-markdown-plugin = "^6.2.1"
 mike = "^2.1.2"
