@@ -30,7 +30,7 @@ optional = true
 
 [tool.poetry.group.dev.dependencies]
 pip = "^24.2"
-pre-commit = "^3.8.0"
+pre-commit = "^4.0.0"
 ruff = "^0.5.7"
 streamlit = "^1.37.1"
 
