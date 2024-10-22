@@ -38,8 +38,9 @@ pip install -r requirements.txt
 For dev mode, requirements files can be generated & installed with `pip-compile` & `pip-sync`:
 
 ```bash
-pip-compile requirements/main.in -o requirements.txt
-pip-compile requirements/dev.in -c requirements.txt -o requirements-dev.txt
+cd requirements
+pip-compile requirements.in
+pip-compile requirements-dev.in
 pip-sync requirements.txt requirements-dev.txt
 ```
 
