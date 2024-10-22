@@ -1,5 +1,7 @@
+-c requirements.txt
+
 # Dev UI
-streamlit>=1.36.1
+streamlit>=1.39.0
 
 # Development requirements
 pre-commit>=4.0.0

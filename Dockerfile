@@ -17,8 +17,8 @@ RUN apt-get update \
     && apt-get install --no-install-recommends -y \
     build-essential
 
-COPY ./requirements.txt /requirements.txt
-COPY ./requirements-dev.txt /requirements-dev.txt
+# Copy requirements.txt and requirements-dev.txt to the container
+COPY ./requirements /
 
 # Install core dependencies using pip
 RUN pip install --upgrade pip
