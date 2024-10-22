@@ -1,11 +1,11 @@
 default_language_version:
   python: python312
-default_stages: [commit]
+default_stages: [pre-commit]
 
 repos:
   # Common pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         args: ['--maxkb=20000']
@@ -29,7 +29,7 @@ repos:
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.5.7
+    rev: v0.7.0
     hooks:
       # Run the linter - replaces Flake8, isort, pydocstyle, pyupgrade
       - id: ruff
@@ -38,6 +38,19 @@ repos:
       # Run the formatter - replaces Black
       - id: ruff-format
         types_or: [ python, pyi, jupyter ]
+
+  # Run pip-compile to generate requirements.txt
+  - repo: https://github.com/jazzband/pip-tools
+    rev: 7.4.1
+    hooks:
+      - id: pip-compile
+        name: pip-compile requirements.txt
+        args: [-q, --allow-unsafe, --resolver=backtracking, --strip-extras, --generate-hashes, -o, requirements.txt, requirements/main.in]
+        files: .*\.(in)$
+      - id: pip-compile
+        name: pip-compile requirements-dev.txt
+        args: [-q, --allow-unsafe, --resolver=backtracking, --generate-hashes, -c, requirements.txt, -o, requirements-dev.txt, requirements/dev.in]
+        files: .*\.(in)$
 
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:

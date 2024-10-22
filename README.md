@@ -5,58 +5,80 @@
 This is a simple template repo to create new projects that use FastAPI and Streamlit.
 It also includes a simple Dockerfile to bundle the FastAPI and Streamlit apps together for development and deployment as needed.
 
+This uses -
+1. [`pip-tools`](https://github.com/jazzband/pip-tools) for dependency management. Initially, [Poetry](https://python-poetry.org/) was used but it was a hellish nightmare especially for ML projects.
+2. `ruff` as a lightweight linter/formatter to `black`, `flake8` & `isort`.
+3. `pre-commit` hooks to run `ruff` & other checks before committing.
+4. `.github` workflows for CI/CD.
+
+For local, non-containerized dev, `pyenv` with `virtualenv` is recommended.
+
 ## Quickstart
 
-This project uses [Poetry](https://python-poetry.org/) for dependency management and [Docker](https://www.docker.com/) for containerization.
-
-Poetry can be installed using the following command:
+First, clone the repo:
 
 ```bash
-curl -sSL https://install.python-poetry.org | python3 -
+git clone <repo-url>
 ```
-Make sure poetry is in the PATH variable after installation. Example: `export PATH=$PATH:$HOME/.local/bin` if poetry is installed in the user's home directory.
 
-Now, you can clone the repo and install the dependencies:
+Create a virtual environment using `pyenv` & `virtualenv`:
 
 ```bash
-git clone
-poetry install --with dev
+pyenv install 3.12.5
+pyenv virtualenv 3.12.5 fapi
+pyenv activate fapi
 ```
 
-The `--with dev` flag is used to install the development dependencies as well. This is needed to run the Streamlit app.
+Now install the dependencies:
 
-> Note: Streamlit is only available in dev mode which is set in the `pyproject.toml` file. This is to keep the production API container as small as possible. Feel free to change this as needed.
+```bash
+pip install -r requirements.txt
+```
 
+For dev mode, requirements files can be generated & installed with `pip-compile` & `pip-sync`:
+
+```bash
+pip-compile requirements/main.in -o requirements.txt
+pip-compile requirements/dev.in -c requirements.txt -o requirements-dev.txt
+pip-sync requirements.txt requirements-dev.txt
+```
+
+Alternatively, `invoke` can be used to trigger the above commands (invoke must be installed first):
+
+```bash
+pip install invoke
+invoke install --dev
+```
 
 Then, you can start the FastAPI development server with:
 
 ```bash
 cd api
-poetry run uvicorn main:app --reload
+uvicorn main:app --reload
 ```
 
 And the Streamlit development UI with:
 
 ```bash
 cd ui
-poetry run streamlit run main.py
+streamlit run 01_🏠_Home.py
 ```
 
-### Docker - Local Development
+## Docker - Local Development
 
 To run the FastAPI and Streamlit apps together in a Docker container, you can use the included `Dockerfile`:
 
 ```bash
 docker build --target dev --tag myapp-dev .
-docker run -p 8000:8000 -p 8501:8501 fastapi-streamlit-starter
+docker run -p 8000:8000 -p 8501:8501 myapp-dev
 ```
 
 The above paradigm is meant for development purposes.
 
-For production, you can use the `Dockerfile` with the `prod` target:
+For production, you can use the `Dockerfile` with the `api` target that only includes the FastAPI app:
 
 ```bash
-docker build --target prod --tag myapp-prod .
+docker build --target api --tag myapp-api .
 ```
 
 This will create a smaller image with only the FastAPI app and its dependencies. Streamlit & its dependencies are not included in the production image since it can significantly increase the image size especially if not shared by the FastAPI app.
