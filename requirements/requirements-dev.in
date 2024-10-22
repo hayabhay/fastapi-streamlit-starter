@@ -1,5 +1,3 @@
--c requirements.txt
-
 # Dev UI
 streamlit>=1.39.0
 
