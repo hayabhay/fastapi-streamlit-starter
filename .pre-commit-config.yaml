@@ -45,15 +45,11 @@ repos:
     hooks:
       - id: pip-compile
         name: pip-compile requirements.txt
-        always_run: false
-        stages: [commit]
-        files: ^requirements/.*\.in$
+        files: ^requirements/.*\.(txt|in)$
         entry: sh -c 'cd requirements && pip-compile -q --allow-unsafe --resolver=backtracking --strip-extras --generate-hashes requirements.in'
       - id: pip-compile
         name: pip-compile requirements-dev.txt
-        always_run: false
-        stages: [commit]
-        files: ^requirements/.*\.in$
+        files: ^requirements/.*\.(txt|in)$
         entry: sh -c 'cd requirements && pip-compile -q --allow-unsafe --resolver=backtracking --generate-hashes requirements-dev.in'
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:
