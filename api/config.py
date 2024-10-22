@@ -20,6 +20,8 @@ if MODE == "dev":
     # Set the logger
     logger.add(PROJECT_DIR / "logs" / "app.log", rotation="10 MB", retention="2 days")
 
+    LOGGER = logger
+
 # Else load it from secrets manager. This is for GCP & can be replaced as needed.
 elif MODE == "prod":
     from io import StringIO
