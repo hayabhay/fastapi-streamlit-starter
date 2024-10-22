@@ -37,5 +37,5 @@ def install(ctx: Context, dev: bool = False) -> None:
     if dev:
         command += " requirements-dev.txt"
 
-    with ctx.cd(BASE_DIR):
+    with ctx.cd(REQUIREMENTS_DIR):
         ctx.run(command, pty=True, echo=True)
