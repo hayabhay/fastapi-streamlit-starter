@@ -9,25 +9,19 @@ REQUIREMENTS_DIR = BASE_DIR / "requirements"
 
 
 @task
-def update(ctx: Context, *, upgrade: bool = False) -> None:
-    common_args = (
-        "-q --allow-unsafe --resolver=backtracking --strip-extras --generate-hashes"
-    )
-    if upgrade:
-        common_args += " --upgrade"
+def update(ctx: Context, *, upgrade: bool = False, hashes: bool = False) -> None:
+    common_args = "-q --allow-unsafe --resolver=backtracking --strip-extras"
+    common_args += " --upgrade" if upgrade else ""
+    common_args += " --generate-hashes" if hashes else ""
 
     with ctx.cd(REQUIREMENTS_DIR):
-        # Create requirements.txt and requirements-dev.txt
-        MAIN_REQ = BASE_DIR / "requirements.txt"
-        DEV_REQ = BASE_DIR / "requirements-dev.txt"
-
         ctx.run(
-            f"pip-compile {common_args} 'main.in' -o {MAIN_REQ}",
+            f"pip-compile {common_args} 'requirements.in'",
             pty=True,
             echo=True,
         )
         ctx.run(
-            f"pip-compile {common_args} 'dev.in' -c {MAIN_REQ} -o {DEV_REQ}",
+            f"pip-compile {common_args} 'requirements-dev.in'",
             pty=True,
             echo=True,
         )
@@ -36,7 +30,7 @@ def update(ctx: Context, *, upgrade: bool = False) -> None:
 @task
 def install(ctx: Context, dev: bool = False) -> None:
     # If requirements.txt is not present, create it
-    if not (BASE_DIR / "requirements.txt").exists():
+    if not (REQUIREMENTS_DIR / "requirements.txt").exists():
         update(ctx)
 
     command = "pip-sync requirements.txt"
