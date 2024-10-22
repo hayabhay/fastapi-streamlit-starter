@@ -39,16 +39,9 @@ For dev mode, requirements files can be generated & installed with `pip-compile`
 
 ```bash
 cd requirements
-pip-compile requirements.in
-pip-compile requirements-dev.in
+pip-compile -q --strip-extras requirements.in
+pip-compile -q --strip-extras requirements-dev.in
 pip-sync requirements.txt requirements-dev.txt
-```
-
-Alternatively, `invoke` can be used to trigger the above commands (invoke must be installed first):
-
-```bash
-pip install invoke
-invoke install --dev
 ```
 
 Then, you can start the FastAPI development server with:
