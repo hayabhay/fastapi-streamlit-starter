@@ -18,24 +18,18 @@ bracex==2.5.post1
     # via wcmatch
 cachetools==5.5.0
     # via
-    #   -c requirements.txt
     #   streamlit
     #   tox
 certifi==2024.8.30
-    # via
-    #   -c requirements.txt
-    #   requests
+    # via requests
 cfgv==3.4.0
     # via pre-commit
 chardet==5.2.0
     # via tox
 charset-normalizer==3.4.0
-    # via
-    #   -c requirements.txt
-    #   requests
+    # via requests
 click==8.1.7
     # via
-    #   -c requirements.txt
     #   mkdocs
     #   mkdocstrings
     #   streamlit
@@ -60,13 +54,9 @@ gitpython==3.1.43
 identify==2.6.1
     # via pre-commit
 idna==3.10
-    # via
-    #   -c requirements.txt
-    #   requests
-importlib-metadata==8.4.0
-    # via
-    #   -c requirements.txt
-    #   mike
+    # via requests
+importlib-metadata==8.5.0
+    # via mike
 importlib-resources==6.4.5
     # via mike
 iniconfig==2.0.0
@@ -140,7 +130,6 @@ numpy==2.1.2
     #   streamlit
 packaging==24.1
     # via
-    #   -c requirements.txt
     #   altair
     #   mkdocs
     #   pyproject-api
@@ -167,10 +156,8 @@ pluggy==1.5.0
     #   tox
 pre-commit==4.0.1
     # via -r requirements-dev.in
-protobuf==5.28.2
-    # via
-    #   -c requirements.txt
-    #   streamlit
+protobuf==5.28.3
+    # via streamlit
 pyarrow==17.0.0
     # via streamlit
 pydeck==0.9.1
@@ -219,7 +206,6 @@ regex==2024.9.11
     # via mkdocs-material
 requests==2.32.3
     # via
-    #   -c requirements.txt
     #   mkdocs-material
     #   streamlit
 rich==13.9.3
@@ -236,7 +222,7 @@ smmap==5.0.1
     # via gitdb
 streamlit==1.39.0
     # via -r requirements-dev.in
-tenacity==8.5.0
+tenacity==9.0.0
     # via streamlit
 toml==0.10.2
     # via streamlit
@@ -246,28 +232,23 @@ tox==4.23.2
     # via -r requirements-dev.in
 typing-extensions==4.12.2
     # via
-    #   -c requirements.txt
     #   altair
     #   streamlit
 tzdata==2024.2
     # via pandas
 urllib3==2.2.3
-    # via
-    #   -c requirements.txt
-    #   requests
+    # via requests
 verspec==0.1.0
     # via mike
 virtualenv==20.27.0
     # via
     #   pre-commit
     #   tox
-watchdog==4.0.2
+watchdog==5.0.3
     # via
     #   mkdocs
     #   streamlit
 wcmatch==10.0
     # via mkdocs-include-markdown-plugin
 zipp==3.20.2
-    # via
-    #   -c requirements.txt
-    #   importlib-metadata
+    # via importlib-metadata

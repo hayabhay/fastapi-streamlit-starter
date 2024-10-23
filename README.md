@@ -24,9 +24,9 @@ git clone <repo-url>
 Create a virtual environment using `pyenv` & `virtualenv`:
 
 ```bash
-pyenv install 3.12.5
-pyenv virtualenv 3.12.5 fapi
-pyenv activate fapi
+pyenv install 3.12.7
+pyenv virtualenv 3.12.7 fapi-starter
+pyenv activate fapi-starter
 ```
 
 Now install the dependencies:
@@ -163,13 +163,13 @@ gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
 2.1. Build the container image:
 
 ```bash
-docker build --target prod --tag gcr.io/my-project/myapp-prod .
+docker build --target prod --tag us-west1-docker.pkg.dev/<my-project>/<repo_name>/myapp-prod .
 ```
 
 2.2. Push the container image to the Google Artifact Registry:
 
 ```bash
-docker push gcr.io/my-project/myapp-prod
+docker push us-west1-docker.pkg.dev/<my-project>/<repo_name>/myapp-prod
 ```
 
 #### Deploy Container
@@ -181,8 +181,11 @@ gcloud run deploy my-fastapi-app \
     --image gcr.io/my-fastapi-project/myapp-prod \
     --platform managed \
     --region <region> \
-    --allow-unauthenticated
+    --allow-unauthenticated \
+    --update-secrets=<secret-id>:latest
 ```
+
+Note: Secrets can be accessed from within the app or can be injected in as environment variables to the container. The latter is recommended and the created-secret `.env` [file can be mounted using an `--update-secrets` flag](https://cloud.google.com/run/docs/configuring/services/secrets#gcloud).
 
 Configurations like region, autoscaling, instance size etc. can be set as needed. You can find more information [here](https://cloud.google.com/sdk/gcloud/reference/run/deploy).
 
@@ -201,7 +204,7 @@ gcloud run services delete my-fastapi-app
 4.2. To delete the container image from the Google Artifact Registry:
 
 ```bash
-gcloud container images delete gcr.io/my-project/myapp-prod
+gcloud container images delete us-west1-docker.pkg.dev/<my-project>/<repo_name>/myapp-prod
 ```
 
 4.3. To delete the Google Cloud project:
