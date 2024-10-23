@@ -27,5 +27,3 @@ if MODE == "prod":
 else:
     # Load the .env file directly
     ENV = dotenv_values(PROJECT_DIR / ".env")
-
-
