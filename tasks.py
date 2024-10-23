@@ -7,7 +7,7 @@ REQUIREMENTS_DIR = BASE_DIR / "requirements"
 
 
 @task
-def update(ctx: Context, *, upgrade: bool = False, hashes: bool = False) -> None:
+def update(ctx: Context, upgrade: bool = False, hashes: bool = False) -> None:
     common_args = "-q --allow-unsafe --resolver=backtracking --strip-extras"
     common_args += " --upgrade" if upgrade else ""
     common_args += " --generate-hashes" if hashes else ""
