@@ -10,20 +10,9 @@ PROJECT_DIR = APP_DIR.parent
 # Check if the app is in production. Default is False.
 MODE = os.environ.get("MODE", "dev").lower()
 
-# If in development mode, load the .env file as an ENV variable
-if MODE == "dev":
-    from loguru import logger
-
-    # Load the .env file directly
-    ENV = dotenv_values(PROJECT_DIR / ".env")
-
-    # Set the logger
-    logger.add(PROJECT_DIR / "logs" / "app.log", rotation="10 MB", retention="2 days")
-
-    LOGGER = logger
-
-# Else load it from secrets manager. This is for GCP & can be replaced as needed.
-elif MODE == "prod":
+# If in prod mode, load env from secrets manager. 
+# This is for GCP & can be replaced as needed.
+if MODE == "prod":
     from io import StringIO
 
     from google.cloud import logging, secretmanager
@@ -53,3 +42,13 @@ elif MODE == "prod":
 
     # Set the log level
     LOGGER.set_log_filter("INFO")
+
+# Else, its in dev mode. Load the .env file as an ENV variable
+else:
+    from loguru import logger
+
+    # Load the .env file directly
+    ENV = dotenv_values(PROJECT_DIR / ".env")
+
+    # Set the logger
+    logger.add(PROJECT_DIR / "logs" / "app.log", rotation="10 MB", retention="2 days")
