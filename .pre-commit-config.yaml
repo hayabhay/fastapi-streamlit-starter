@@ -39,21 +39,6 @@ repos:
       - id: ruff-format
         types_or: [ python, pyi, jupyter ]
 
-  # # Run pip-compile to generate requirements.txt
-  # - repo: https://github.com/jazzband/pip-tools
-  #   rev: 7.4.1
-  #   hooks:
-  #     - id: pip-compile
-  #       name: pip-compile requirements.txt
-  #       files: ^requirements/.*\.(txt|in)$
-  #       entry: sh -c 'cd requirements && pip-compile -q --allow-unsafe --resolver=backtracking --strip-extras --generate-hashes requirements.in'
-  #       stages: [pre-commit]
-  #     - id: pip-compile
-  #       name: pip-compile requirements-dev.txt
-  #       files: ^requirements/.*\.(txt|in)$
-  #       entry: sh -c 'cd requirements && pip-compile -q --allow-unsafe --resolver=backtracking --generate-hashes requirements-dev.in'
-  #       stages: [pre-commit]
-
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:
   autoupdate_schedule: weekly
