@@ -6,7 +6,7 @@ This is a simple template repo to create new projects that use FastAPI and Strea
 It also includes a simple Dockerfile to bundle the FastAPI and Streamlit apps together for development and deployment as needed.
 
 This uses -
-1. [`pip-tools`](https://github.com/jazzband/pip-tools) for dependency management. Initially, [Poetry](https://python-poetry.org/) was used but it was a hellish nightmare especially for ML projects.
+1. [Poetry](https://python-poetry.org/) for package management. This had been used & abandoned in the past but is being used again. `pip-tools` was used in the interim but it is not as feature-rich as `poetry`. However, `poetry` is quite complicated when it comes to ML projects so be wary of that when this is used for ML projects.
 2. `ruff` as a lightweight linter/formatter to `black`, `flake8` & `isort`.
 3. `pre-commit` hooks to run `ruff` & other checks before committing.
 4. `.github` workflows for CI/CD.
@@ -24,44 +24,40 @@ git clone <repo-url>
 Create a virtual environment using `pyenv` & `virtualenv`:
 
 ```bash
-pyenv install 3.12.5
-pyenv virtualenv 3.12.5 fapi
+pyenv install 3.12.7
+pyenv virtualenv 3.12.7 fapi
 pyenv activate fapi
+```
+
+Install `poetry` with `pipx`:
+
+```bash
+pipx install poetry
 ```
 
 Now install the dependencies:
 
 ```bash
-pip install -r requirements.txt
+git clone
+poetry install --with dev
 ```
 
-For dev mode, requirements files can be generated & installed with `pip-compile` & `pip-sync`:
+The `--with dev` flag is used to install the development dependencies as well. This is needed to run the Streamlit app.
 
-```bash
-pip-compile requirements/main.in -o requirements.txt
-pip-compile requirements/dev.in -c requirements.txt -o requirements-dev.txt
-pip-sync requirements.txt requirements-dev.txt
-```
+> Note: Streamlit is only available in dev mode which is set in the `pyproject.toml` file. This is to keep the production API container as small as possible. Feel free to change this as needed.
 
-Alternatively, `invoke` can be used to trigger the above commands (invoke must be installed first):
-
-```bash
-pip install invoke
-invoke install --dev
-```
-
-Then, you can start the FastAPI development server with:
+Now, you can run the FastAPI app:
 
 ```bash
 cd api
-uvicorn main:app --reload
+poetry run uvicorn main:app --reload
 ```
 
 And the Streamlit development UI with:
 
 ```bash
 cd ui
-streamlit run 01_🏠_Home.py
+poetry run streamlit run 01_🏠_Home.py
 ```
 
 ## Docker - Local Development
@@ -166,16 +162,27 @@ gcloud projects add-iam-policy-binding YOUR_PROJECT_ID \
 
 #### Build & Push Container
 
-2.1. Build the container image:
+2.0 Create an artifact registry repository.
+
+After enabling artifact registry, [you can create a repository using the GUI or the CLI](https://cloud.google.com/artifact-registry/docs/docker/store-docker-container-images).
+
+You can also check if this is enabled & list the repositories:
 
 ```bash
-docker build --target prod --tag gcr.io/my-project/myapp-prod .
+gcloud artifacts repositories list
 ```
+
+2.1. Build & tag the container image
+
+```bash
+docker build --target api --tag us-west1-docker.pkg.dev/<my-project>/<repo>/myapp-prod .
+```
+
 
 2.2. Push the container image to the Google Artifact Registry:
 
 ```bash
-docker push gcr.io/my-project/myapp-prod
+docker push us-west1-docker.pkg.dev/<my-project>/<repo>/myapp-prod
 ```
 
 #### Deploy Container
@@ -189,6 +196,8 @@ gcloud run deploy my-fastapi-app \
     --region <region> \
     --allow-unauthenticated
 ```
+
+Note: Secrets can be accessed from within the app or can be injected in as environment variables to the container. The latter is recommended and the created-secret `.env` [file can be mounted using an `--update-secrets` flag](https://cloud.google.com/run/docs/configuring/services/secrets#gcloud).
 
 Configurations like region, autoscaling, instance size etc. can be set as needed. You can find more information [here](https://cloud.google.com/sdk/gcloud/reference/run/deploy).
 

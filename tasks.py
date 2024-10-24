@@ -5,37 +5,44 @@ from pathlib import Path
 from invoke import Context, task
 
 BASE_DIR = Path(__file__).parent.resolve(strict=True)
-REQUIREMENTS_DIR = BASE_DIR / "requirements"
 
 
 @task
-def update(ctx: Context, *, upgrade: bool = False, hashes: bool = False) -> None:
-    common_args = "-q --allow-unsafe --resolver=backtracking --strip-extras"
-    common_args += " --upgrade" if upgrade else ""
-    common_args += " --generate-hashes" if hashes else ""
-
-    with ctx.cd(REQUIREMENTS_DIR):
-        ctx.run(
-            f"pip-compile {common_args} 'requirements.in'",
-            pty=True,
-            echo=True,
-        )
-        ctx.run(
-            f"pip-compile {common_args} 'requirements-dev.in'",
-            pty=True,
-            echo=True,
-        )
-
-
-@task
-def install(ctx: Context, dev: bool = False) -> None:
-    # If requirements.txt is not present, create it
-    if not (REQUIREMENTS_DIR / "requirements.txt").exists():
-        update(ctx)
-
-    command = "pip-sync requirements.txt"
-    if dev:
-        command += " requirements-dev.txt"
-
+def build(ctx: Context, project: str, region: str, repo: str, name: str) -> None:
     with ctx.cd(BASE_DIR):
-        ctx.run(command, pty=True, echo=True)
+        image_name = f"{region}-docker.pkg.dev/{project}/{repo}/{name}"
+        ctx.run(
+            f"docker build --target api --tag {image_name} .",
+            pty=True,
+            echo=True,
+        )
+
+
+@task
+def deploy(ctx: Context, project: str, region: str, repo: str, name: str) -> None:
+    with ctx.cd(BASE_DIR):
+        image_name = f"{region}-docker.pkg.dev/{project}/{repo}/{name}"
+        ctx.run(
+            f"docker push {image_name}",
+            pty=True,
+            echo=True,
+        )
+        ctx.run(
+            f"gcloud run deploy {name} --region {region} --image {image_name}",
+            pty=True,
+            echo=True,
+        )
+
+
+@task
+def gitprep(ctx: Context) -> None:
+    with ctx.cd(BASE_DIR):
+        ctx.run("git add .", pty=True, echo=True)
+        ctx.run("pre-commit run", pty=True, echo=True)
+
+
+@task
+def gitpush(ctx: Context, message: str) -> None:
+    with ctx.cd(BASE_DIR):
+        ctx.run(f'git commit -am "{message}"', pty=True, echo=True)
+        ctx.run("git push ", pty=True, echo=True)
