@@ -194,7 +194,8 @@ gcloud run deploy my-fastapi-app \
     --image gcr.io/my-fastapi-project/myapp-prod \
     --platform managed \
     --region <region> \
-    --allow-unauthenticated
+    --allow-unauthenticated \
+    --update-secrets=<secret-id>:latest
 ```
 
 Note: Secrets can be accessed from within the app or can be injected in as environment variables to the container. The latter is recommended and the created-secret `.env` [file can be mounted using an `--update-secrets` flag](https://cloud.google.com/run/docs/configuring/services/secrets#gcloud).
@@ -216,7 +217,7 @@ gcloud run services delete my-fastapi-app
 4.2. To delete the container image from the Google Artifact Registry:
 
 ```bash
-gcloud container images delete gcr.io/my-project/myapp-prod
+gcloud container images delete us-west1-docker.pkg.dev/<my-project>/<repo_name>/myapp-prod
 ```
 
 4.3. To delete the Google Cloud project:

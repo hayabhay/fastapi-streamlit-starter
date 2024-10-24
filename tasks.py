@@ -1,5 +1,3 @@
-# Source: https://gabnotes.org/pip-tools-for-python-dependencies-management/
-
 from pathlib import Path
 
 from invoke import Context, task
