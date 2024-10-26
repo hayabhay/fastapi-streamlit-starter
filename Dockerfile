@@ -104,7 +104,7 @@ COPY --from=builder-base $PYSETUP_PATH $PYSETUP_PATH
 
 # quicker install as runtime deps are already installed
 RUN --mount=type=cache,target=/root/.cache \
-    poetry install --with=dev,gcp
+    poetry install --with=dev
 
 # Copy the rest of the application & set it up
 COPY ./ui /app/ui
