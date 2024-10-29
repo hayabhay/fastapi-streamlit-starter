@@ -51,6 +51,7 @@ def gitmerge(ctx: Context, branch: str = "dev") -> None:
     with ctx.cd(BASE_DIR):
         ctx.run("git checkout main", pty=True, echo=True)
         ctx.run(f"git merge {branch} main", pty=True, echo=True)
+        ctx.run("git push", pty=True, echo=True)
         ctx.run(f"git checkout {branch}", pty=True, echo=True)
 
 
