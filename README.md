@@ -65,8 +65,7 @@ poetry run streamlit run 01_🏠_Home.py
 To run the FastAPI and Streamlit apps together in a Docker container, you can use the included `Dockerfile`:
 
 ```bash
-docker build --target dev --tag myapp-dev .
-docker run -p 8000:8000 -p 8501:8501 myapp-dev
+docker compose -f docker-compose.local.yml up
 ```
 
 The above paradigm is meant for development purposes.
@@ -74,7 +73,7 @@ The above paradigm is meant for development purposes.
 For production, you can use the `Dockerfile` with the `api` target that only includes the FastAPI app:
 
 ```bash
-docker build --target api --tag myapp-api .
+docker compose -f docker-compose.production.yml build
 ```
 
 This will create a smaller image with only the FastAPI app and its dependencies. Streamlit & its dependencies are not included in the production image since it can significantly increase the image size especially if not shared by the FastAPI app.
@@ -175,7 +174,7 @@ gcloud artifacts repositories list
 2.1. Build & tag the container image
 
 ```bash
-docker build --target api --tag us-west1-docker.pkg.dev/<my-project>/<repo>/myapp-prod .
+docker build --tag us-west1-docker.pkg.dev/<my-project>/<repo>/myapp-prod .
 ```
 
 
