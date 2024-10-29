@@ -1,5 +1,5 @@
 # Custom ignore
-local/
+playground/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
