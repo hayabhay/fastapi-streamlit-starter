@@ -13,6 +13,8 @@ TEMP_DIR = Path(tempfile.gettempdir())
 DEV = os.environ.get("DEV", False)
 SERVER_LOC = os.environ.get("SERVER_LOC", "http://localhost:8000")
 
+print(SERVER_LOC)
+
 # Common page configurations
 # --------------------------
 ABOUT = """

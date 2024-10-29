@@ -1,0 +1,47 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./compose/local/api/Dockerfile
+    image: fastapi-dev
+    container_name: fastapi-dev
+    environment:
+      - MODE=dev
+    env_file:
+      - ./.env
+    command: /start
+    networks:
+      - app
+    ports:
+      - '8000:8000'
+    develop:
+      watch:
+        - action: sync
+          path: ./api
+          target: /api
+
+  ui:
+    build:
+      context: .
+      dockerfile: ./compose/local/ui/Dockerfile
+    image: fastapi-ui-dev
+    container_name: fastapi-ui-dev
+    # Envs that take need to take precedence over ones in .env
+    environment:
+      - SERVER_LOC=http://api:8000
+    env_file:
+      - ./.env
+    command: /start
+    networks:
+      - app
+    ports:
+      - '8501:8501'
+    develop:
+      watch:
+        - action: sync
+          path: ./ui
+          target: /ui
+
+networks:
+  app:
+    driver: bridge

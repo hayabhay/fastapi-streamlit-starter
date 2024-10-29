@@ -1,9 +1,12 @@
-from config import ENV
+from functools import lru_cache
+from config import Settings
 from fastapi import FastAPI
 
+@lru_cache
+def get_settings():
+    return Settings()
 
 app = FastAPI()
-
 
 @app.get("/")
 def read_root():
