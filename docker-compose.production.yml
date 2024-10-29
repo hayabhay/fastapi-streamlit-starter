@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/api/Dockerfile
-    image: fastapi
+    image: $IMAGE_NAME
     container_name: fastapi
     environment:
       - MODE=prod

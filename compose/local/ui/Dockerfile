@@ -112,3 +112,5 @@ WORKDIR ${APP_HOME}
 
 # copy application code to WORKDIR
 COPY ./ui ${APP_HOME}
+
+CMD [ "/start" ]

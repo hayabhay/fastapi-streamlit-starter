@@ -10,7 +10,7 @@ def build(ctx: Context, project: str, region: str, repo: str, name: str) -> None
     with ctx.cd(BASE_DIR):
         image_name = f"{region}-docker.pkg.dev/{project}/{repo}/{name}"
         ctx.run(
-            f"docker build --target api --tag {image_name} .",
+            f"docker compose -f docker-compose.production.yml build",
             pty=True,
             echo=True,
         )

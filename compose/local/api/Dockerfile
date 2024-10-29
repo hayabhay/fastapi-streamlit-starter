@@ -104,6 +104,10 @@ COPY --from=python-build-stage $PYSETUP_PATH $PYSETUP_PATH
 RUN --mount=type=cache,target=/root/.cache \
     poetry install --sync
 
+COPY ./compose/production/api/entrypoint /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
 COPY ./compose/local/api/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
@@ -112,3 +116,7 @@ WORKDIR ${APP_HOME}
 
 # copy application code to WORKDIR
 COPY ./api ${APP_HOME}
+
+ENTRYPOINT ["/entrypoint"]
+
+CMD ["/start"]

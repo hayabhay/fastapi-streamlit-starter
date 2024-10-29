@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+# Do-nothing entrypoint that simply runs the command it's given
+# This is useful for adding more things in if needed
+
+exec "$@"
